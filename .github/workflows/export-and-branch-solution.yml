@@ -25,9 +25,9 @@ on:
        default: solutions/
 env:
 #edit your values here
-  ENVIRONMENT_URL: '<https://rajadev.crm8.dynamics.com/>'
-  CLIENT_ID: '<D5R8Q~NE8WZSVycetPTbEXZkQc37KlRdrf6qHdyQ>'
-  TENANT_ID: '<21f74bf9-8ab8-4168-811d-fa04d78ab412>'
+  ENVIRONMENT_URL: 'https://rajadev.crm8.dynamics.com'
+  CLIENT_ID: 'D5R8Q~NE8WZSVycetPTbEXZkQc37KlRdrf6qHdyQ'
+  TENANT_ID: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
 permissions:
   contents: write
 jobs:
