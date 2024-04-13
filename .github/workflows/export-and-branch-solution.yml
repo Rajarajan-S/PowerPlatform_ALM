@@ -26,7 +26,7 @@ on:
 env:
 #edit your values here
   ENVIRONMENT_URL: '<https://rajadev.crm8.dynamics.com/>'
-  CLIENT_ID: '<0a00a0cd-ed0b-4b09-935f-d0a579aa8e11>'
+  CLIENT_ID: '<D5R8Q~NE8WZSVycetPTbEXZkQc37KlRdrf6qHdyQ>'
   TENANT_ID: '<21f74bf9-8ab8-4168-811d-fa04d78ab412>'
 permissions:
   contents: write
@@ -42,7 +42,13 @@ jobs:
       with:
         lfs: true
 
-
+    - name: who-am-i action
+      uses: microsoft/powerplatform-actions/who-am-i@v0
+      with:
+        environment-url: ${{env.ENVIRONMENT_URL}}
+        app-id: ${{env.CLIENT_ID}}
+        client-secret: ${{ secrets.PowerPlatformSPN }}
+        tenant-id: ${{env.TENANT_ID}}
 
     - name: export-solution action
       uses: microsoft/powerplatform-actions/export-solution@v0
