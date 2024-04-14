@@ -1,0 +1,36 @@
+name: import-solution
+
+on:
+  workflow_dispatch:
+    inputs:
+      # Change this value
+      solution_file_path:
+        description: 'Path to the solution file to be imported'
+        required: true
+        #default: 
+
+env:
+  # Edit your values here
+  ENVIRONMENT_URL: 'https://rajatest.crm8.dynamics.com'
+  CLIENT_ID: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
+  TENANT_ID: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
+
+permissions:
+  contents: read
+
+jobs:
+  import-to-dev:
+    runs-on: windows-latest
+    # or you can say runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: import-solution action
+      uses: microsoft/powerplatform-actions/import-solution@v0
+      with:
+        environment-url: ${{env.ENVIRONMENT_URL}}
+        app-id: ${{env.CLIENT_ID}}
+        client-secret: ${{ secrets.POWERPLATFORMALM }}
+        tenant-id: ${{env.TENANT_ID}}
+        solution-file: ${{ github.event.inputs.solution_file_path }}
