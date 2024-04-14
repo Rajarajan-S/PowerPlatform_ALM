@@ -15,7 +15,7 @@ env:
   CLIENT_ID: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
   TENANT_ID: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
   solution_name: '${{ github.event.inputs.solution_name }}'
-  solution-file: 'solutions/${{ github.event.inputs.solution_name }}/${{ github.event.inputs.solution_name }}.zip'     
+  solution-file: 'out/exported/${{ github.event.inputs.solution_name }}.zip'     
 
 permissions:
   contents: read
