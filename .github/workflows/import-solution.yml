@@ -14,7 +14,7 @@ env:
   # Edit your values here
   CLIENT_ID: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
   TENANT_ID: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
-  solution_name: ${{ github.event.inputs.solution_name }}
+  solution_name: '${{ github.event.inputs.solution_name }}'
 
 permissions:
   contents: read
@@ -30,7 +30,7 @@ jobs:
     - name: Find solution file
       run: |
         # Find the file path based on the solution name provided
-        solution_name="${{ github.event.inputs.solution_name }}"
+        solution_name="${{env.solution_name}}"
         solution_file_path="solutions/${solution_name}.zip"
         echo "Solution file path: $solution_file_path"
         echo "::set-output name=solution_file_path::$solution_file_path"
