@@ -3,11 +3,9 @@ name: import-solution
 on:
   workflow_dispatch:
     inputs:
-      # Change this value
-      solution_file_path:
-        description: 'Path to the solution file to be imported'
+      solution_name:
+        description: 'Name of the solution to be imported'
         required: true
-        #default: 
 
 env:
   # Edit your values here
