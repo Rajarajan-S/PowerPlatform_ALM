@@ -15,6 +15,7 @@ env:
   CLIENT_ID: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
   TENANT_ID: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
   solution_name: '${{ github.event.inputs.solution_name }}'
+  solution-file: 'solutions/${env:solution_name}.zip'
 
 permissions:
   contents: read
@@ -46,4 +47,4 @@ jobs:
         client-secret: ${{ secrets.POWERPLATFORMALM }}
         tenant-id: ${{env.TENANT_ID}}
         #solution-file: ${{ steps['Find solution file'].outputs.solution_file_path }}
-        solution-file: ${{ steps.find_solution.outputs.solution_file_path }}
+        solution-file: ${{env.solution-file}}
