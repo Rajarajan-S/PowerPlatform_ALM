@@ -30,10 +30,9 @@ jobs:
     - name: Find solution file
       run: |
       
-        
         # Find the file path based on the solution name provided
         $env:solution_name = "${{ github.event.inputs.solution_name }}"
-        $solution_file_path = "solutions/${env:solution_name}.zip"
+        $solution_file_path = "solutions/${env:solution_name}"
         echo "Solution file path: $solution_file_path"
         echo "::set-output name=solution_file_path::$solution_file_path"
 
