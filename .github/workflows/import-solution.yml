@@ -22,7 +22,7 @@ permissions:
 jobs:
   import-to-environment:
     runs-on: windows-latest
-    # or you can say runs-on: ubuntu-latest
+    # or you can say runs-on: ubuntu-latest  
 
     steps:
     - uses: actions/checkout@v2
@@ -30,7 +30,7 @@ jobs:
     - name: Find solution file
       run: |
         # Find the file path based on the solution name provided
-        solution_name="${{ env.solution_name }}"
+        solution_name="${{ github.event.inputs.solution_name }}"
         solution_file_path="solutions/${solution_name}.zip"
         echo "Solution file path: $solution_file_path"
         echo "::set-output name=solution_file_path::$solution_file_path"
