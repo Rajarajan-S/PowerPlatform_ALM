@@ -34,7 +34,7 @@ jobs:
 
         # Find the file path based on the solution name provided
         $env:solution_name = "${{ github.event.inputs.solution_name }}"
-        $solution_file_path = "/solutions/${env:solution_name}.zip"
+        $solution_file_path = "solutions/${env:solution_name}.zip"
         echo "Solution file path: $solution_file_path"
         
         echo "SOLUTION_FILE_PATH=$solution_file_path" >> $GITHUB_ENV
@@ -46,5 +46,5 @@ jobs:
         app-id: ${{env.CLIENT_ID}}
         client-secret: ${{ secrets.POWERPLATFORMALM }}
         tenant-id: ${{env.TENANT_ID}}
-        solution-file: ${{ steps['Find solution file'].outputs.solution_file_path }}
-        #solution-file: ${{env.solution-file}}
+        #solution-file: ${{ steps['Find solution file'].outputs.solution_file_path }}
+        solution-file: ${{env.solution-file}}
