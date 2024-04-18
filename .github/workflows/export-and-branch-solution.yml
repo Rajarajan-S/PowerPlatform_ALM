@@ -1,67 +1,67 @@
-name: export-and-branch-solution
+name: export-and-commit-solution
+# Reusable workflow
 # Export solution from DEV environment
-#  unpack it and prepare, commit and push a git branch with the changes
+#  unpack it and prepare, commit and push the changes
 
 on:
   workflow_dispatch:
+
     inputs:
+
       # Change this value
-      solution_name:
-        description: 'Name of the solution from Power Platform'
+
+      environment:
+        type: choice
+        description: Environment
         required: true
-        #default: 
+        options:
+          - Development
+          
+      track_name:
+        type: choice
+        description: Track Name
+        required: true
+        options:
+          - Sales Enablemenent
+          - Platform Enablement
+          - Customer Support
+          - Digital Channels
+          
+      solution_name:
+
+        description: 'name of the solution to worked on from Power Platform'
+
+        required: true
+
        #Do Not change these values
-      
-env:
-#edit your values here
-  ENVIRONMENT_URL: 'https://rajadev.crm8.dynamics.com'
-  CLIENT_ID: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
-  TENANT_ID: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
-permissions:
-  contents: write
-jobs:
-  export-from-dev:
-    runs-on: windows-latest
-    # or you can say runs-on: ubuntu-latest
-    env:
-      RUNNER_DEBUG: 1
+       
+      current_user_email:
 
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        lfs: true
+        description: 'Email Id of person doing Deployment'
 
-    - name: who-am-i action
-      uses: microsoft/powerplatform-actions/who-am-i@v0
-      with:
-        environment-url: ${{env.ENVIRONMENT_URL}}
-        app-id: ${{env.CLIENT_ID}}
-        client-secret: ${{ secrets.POWERPLATFORMALM }}
-        tenant-id: ${{env.TENANT_ID}}
+        required: true
 
-    - name: export-solution action
-      uses: microsoft/powerplatform-actions/export-solution@v0
-      with:
-        environment-url: ${{env.ENVIRONMENT_URL}}
-        app-id: ${{env.CLIENT_ID}}
-        client-secret: ${{ secrets.POWERPLATFORMALM }}
-        tenant-id: ${{env.TENANT_ID}}
-        solution-name: ${{ github.event.inputs.solution_name }}
-        solution-output-file: ${{ github.event.repository.name}}/${{ github.event.inputs.solution_name }}_unmanagedsoln.zip
-        overwrite: true
-      
-    - name: unpack-solution action
-      uses: microsoft/powerplatform-actions/unpack-solution@v0
-      with:
-        solution-file: ${{ github.event.repository.name}}/${{ github.event.inputs.solution_name }}_unmanagedsoln.zip
-        solution-folder: ${{ github.event.repository.name}}/${{ github.event.inputs.solution_name }}
-        solution-type: 'Unmanaged'
-        overwrite-files: true
-     
-    - name: Git Fetch and Commit 
-      run: |
-        git fetch --all  
-        git checkout Demo
-        git add --all 
-        git commit -m "Updates from the dev environment"
-        git push
+       #Do Not change these values
+      solution_exported_folder:
+
+        description: 'folder name for staging the exported solution *do not change*'
+
+        required: true
+
+        default: out/exported/
+
+      solution_folder:
+
+        description: 'staging the unpacked solution folder before check-in *do not change*'
+
+        required: true
+
+        default: out/solutions/
+
+      solution_target_folder: 
+
+       description: 'folder name to be created and checked in *do not change*'
+
+       required: true
+
+       default: solutions/
