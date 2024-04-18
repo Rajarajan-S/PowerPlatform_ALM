@@ -57,4 +57,11 @@ jobs:
         solution-folder: ${{ github.event.repository.name}}/${{ github.event.inputs.solution_name }}
         solution-type: 'Unmanaged'
         overwrite-files: true
-
+     
+    - name: Git Fetch and Commit 
+      run: |
+        git fetch --all  
+        git checkout Demo
+        git add --all 
+        git commit -m "Updates from the dev environment"
+        git push
