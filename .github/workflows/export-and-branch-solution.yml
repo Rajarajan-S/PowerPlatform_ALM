@@ -1,67 +1,77 @@
-name: export-and-commit-solution
-# Reusable workflow
+name: export-and-branch-solution
 # Export solution from DEV environment
-#  unpack it and prepare, commit and push the changes
+#  unpack it and prepare, commit and push a git branch with the changes
 
 on:
   workflow_dispatch:
-
     inputs:
-
       # Change this value
-
-      environment:
-        type: choice
-        description: Environment
-        required: true
-        options:
-          - Development
-          
-      track_name:
-        type: choice
-        description: Track Name
-        required: true
-        options:
-          - Sales Enablemenent
-          - Platform Enablement
-          - Customer Support
-          - Digital Channels
-          
       solution_name:
-
-        description: 'name of the solution to worked on from Power Platform'
-
+        description: 'Name of the solution from Power Platform'
         required: true
-
-       #Do Not change these values
-       
-      current_user_email:
-
-        description: 'Email Id of person doing Deployment'
-
-        required: true
-
+        #default: 
        #Do Not change these values
       solution_exported_folder:
-
-        description: 'folder name for staging the exported solution *do not change*'
-
+        description: 'Folder name for staging the exported solution *do not change*'
         required: true
-
         default: out/exported/
-
       solution_folder:
-
-        description: 'staging the unpacked solution folder before check-in *do not change*'
-
+        description: 'Staging the unpacked solution folder before check-in *do not change*'
         required: true
-
         default: out/solutions/
-
       solution_target_folder: 
-
-       description: 'folder name to be created and checked in *do not change*'
-
+       description: 'Folder name to be created and checked in *do not change*'
        required: true
-
        default: solutions/
+env:
+#edit your values here
+  ENVIRONMENT_URL: 'https://rajadev.crm8.dynamics.com'
+  CLIENT_ID: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
+  TENANT_ID: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
+permissions:
+  contents: write
+jobs:
+  export-from-dev:
+    runs-on: windows-latest
+    # or you can say runs-on: ubuntu-latest
+    env:
+      RUNNER_DEBUG: 1
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: true
+
+    - name: who-am-i action
+      uses: microsoft/powerplatform-actions/who-am-i@v0
+      with:
+        environment-url: ${{env.ENVIRONMENT_URL}}
+        app-id: ${{env.CLIENT_ID}}
+        client-secret: ${{ secrets.POWERPLATFORMALM }}
+        tenant-id: ${{env.TENANT_ID}}
+
+    - name: export-solution action
+      uses: microsoft/powerplatform-actions/export-solution@v0
+      with:
+        environment-url: ${{env.ENVIRONMENT_URL}}
+        app-id: ${{env.CLIENT_ID}}
+        client-secret: ${{ secrets.POWERPLATFORMALM }}
+        tenant-id: ${{env.TENANT_ID}}
+        solution-name: ${{ github.event.inputs.solution_name }}
+        solution-output-file: ${{ github.event.inputs.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
+
+    - name: unpack-solution action
+      uses: microsoft/powerplatform-actions/unpack-solution@v0
+      with:
+        solution-file: ${{ github.event.inputs.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
+        solution-folder: ${{ github.event.inputs.solution_folder}}/${{ github.event.inputs.solution_name }}
+        solution-type: 'Unmanaged'
+        overwrite-files: true
+
+    - name: branch-solution, prepare it for a PullRequest
+      uses: microsoft/powerplatform-actions/branch-solution@v0
+      with:
+        solution-folder: ${{ github.event.inputs.solution_folder}}/${{ github.event.inputs.solution_name }}
+        solution-target-folder: ${{ github.event.inputs.solution_target_folder}}/${{ github.event.inputs.solution_name }}
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        allow-empty-commit: true
