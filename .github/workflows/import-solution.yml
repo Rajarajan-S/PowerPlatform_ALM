@@ -15,7 +15,7 @@ env:
   CLIENT_ID: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
   TENANT_ID: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
   solution_name: '${{ github.event.inputs.solution_name }}'
-  solution-file: 'solutions/${{ github.event.inputs.solution_name }}.zip'     
+  solution-file: 'solutions/${{ github.event.inputs.solution_name }}/Other/Solution.xml'     
 
 permissions:
   contents: read
@@ -34,7 +34,7 @@ jobs:
 
         # Find the file path based on the solution name provided
         $env:solution_name = "${{ github.event.inputs.solution_name }}"
-        $solution_file_path = "solutions/${env:solution_name}.zip"
+        $solution_file_path = "'solutions/${{ github.event.inputs.solution_name }}/Other/Solution.xml'     "
         echo "Solution file path: $solution_file_path"
         
         echo "SOLUTION_FILE_PATH=$solution_file_path" >> $GITHUB_ENV
