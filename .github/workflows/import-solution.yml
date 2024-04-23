@@ -1,36 +1,48 @@
 name: import-solution
+# prepare for releasing to prod:
+#   convert solution to managed (using a build PowerPlatform environment for the conversion)
+#   upload the solution to the GitHub artifacts and deploy to the PROD environment
 
 on:
   workflow_dispatch:
-    inputs:
+     inputs:
       solution_name:
         description: 'Name of the solution from Power Platform'
         required: true
-      solution_import_folder:
-        description: 'Folder name where the solution to import is located *do not change*'
-        required: true
-        default: solutions/
-      solution_target_folder: 
-        description: 'Folder name in target environment for the imported solution *do not change*'
-        required: true
-        default: solutions/
 
+  release:
+    types: [created]
+
+permissions:
+  contents: write
 jobs:
-  import-to-target:
+  convert-to-managed:
     runs-on: windows-latest
-    # or you can say runs-on: ubuntu-latest
+    env:
+      RUNNER_DEBUG: 1
+      ENVIRONMENT_URL: 'https://rajatest.crm8.dynamics.com/'
+      CLIENT_ID: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
+      TENANT_ID: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
 
     steps:
     - uses: actions/checkout@v2
       with:
         lfs: true
 
-    - name: import-solution action
+    - name: Pack solution
+      uses: microsoft/powerplatform-actions/pack-solution@v0
+      with:
+        solution-folder: solutions/
+        solution-file: out/solutions/${{ github.event.inputs.solution_name }}.zip
+        solution-type: Unmanaged
+
+    - name: Import solution as unmanaged to test env
       uses: microsoft/powerplatform-actions/import-solution@v0
       with:
-        environment-url: 'https://rajatest.crm8.dynamics.com/'
-        app-id: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
+        environment-url: ${{env.ENVIRONMENT_URL}}
         client-secret: ${{ secrets.POWERPLATFORMALM }}
-        tenant-id: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
-        solution-file: ${{ github.event.inputs.solution_import_folder}}/${{ github.event.inputs.solution_name }}/Other/Solution.xml
-        target-folder: ${{ github.event.inputs.solution_target_folder}}
+        tenant-id: ${{env.TENANT_ID}}
+        app-id: ${{env.CLIENT_ID}}
+        solution-file: out/solutions/${{ github.event.inputs.solution_name }}.zip
+        force-overwrite: true
+        publish-changes: true
