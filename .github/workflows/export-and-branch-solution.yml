@@ -70,7 +70,7 @@ jobs:
 
     - name: Debug - List Exported Files 
       run: |
-        ls -al ${{ github.event.inputs.solution_exported_folder}}
+        dir ${{ github.event.inputs.solution_exported_folder}}
 
     - name: branch-solution, prepare it for a PullRequest
       uses: microsoft/powerplatform-actions/branch-solution@v0
