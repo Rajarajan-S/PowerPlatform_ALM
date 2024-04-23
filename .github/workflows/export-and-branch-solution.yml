@@ -4,7 +4,7 @@ name: export-and-branch-solution
 
 on:
   workflow_dispatch:
-  inputs:
+   inputs:
       solution_name:
         description: 'Name of the solution from Power Platform'
         required: true
