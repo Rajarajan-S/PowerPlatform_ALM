@@ -4,27 +4,14 @@ name: export-and-branch-solution
 
 on:
   workflow_dispatch:
-    inputs:
+  inputs:
       solution_name:
         description: 'Name of the solution from Power Platform'
         required: true
-      solution_exported_folder:
-        description: 'Folder name for staging the exported solution *do not change*'
-        required: true
-        default: out/exported/
-      solution_folder:
-        description: 'Staging the unpacked solution folder before check-in *do not change*'
-        required: true
-        default: out/solutions/
-      solution_target_folder: 
-        description: 'Folder name to be created and checked in *do not change*'
-        required: true
-        default: solutions/
-
-env:
-  ENVIRONMENT_URL: 'https://rajadev.crm8.dynamics.com'
-  CLIENT_ID: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
-  TENANT_ID: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 permissions:
   contents: write
@@ -32,9 +19,11 @@ permissions:
 jobs:
   export-from-dev:
     runs-on: windows-latest
-
     env:
       RUNNER_DEBUG: 1
+      ENVIRONMENT_URL: 'https://rajadev.crm8.dynamics.com/'
+      CLIENT_ID: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
+      TENANT_ID: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
 
     steps:
     - uses: actions/checkout@v2
@@ -52,35 +41,25 @@ jobs:
     - name: export-solution action
       uses: microsoft/powerplatform-actions/export-solution@v0
       with:
-        environment-url: ${{env.ENVIRONMENT_URL}}
-        app-id: ${{env.CLIENT_ID}}
+        environment-url: 'https://rajadev.crm8.dynamics.com'
         client-secret: ${{ secrets.POWERPLATFORMALM }}
         tenant-id: ${{env.TENANT_ID}}
+        app-id: ${{env.CLIENT_ID}}
         solution-name: ${{ github.event.inputs.solution_name }}
-        solution-output-file: '${{ github.event.inputs.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip'
+        solution-output-file: out/exported/${{ github.event.inputs.solution_name }}.zip
 
     - name: unpack-solution action
       uses: microsoft/powerplatform-actions/unpack-solution@v0
       with:
-        solution-file: ${{ github.event.inputs.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
-        solution-folder: ${{ github.event.inputs.solution_folder}}/${{ github.event.inputs.solution_name }}
+        solution-file: out/exported/${{ github.event.inputs.solution_name }}.zip
+        solution-folder: out/solutions/${{ github.event.inputs.solution_name }}
         solution-type: 'Unmanaged'
         overwrite-files: true
 
-    - name: Debug - List Exported Files 
-      run: |
-        dir ${{ github.event.inputs.solution_exported_folder}}
-
-    - name: Commit Solution Zip to Repository
-      uses: actions/checkout@v2
-      with:
-        repository: ${{ github.repository }}
-        path: '${{ github.event.inputs.solution_target_folder}}/${{ github.event.inputs.solution_name }}.zip'
-    
     - name: branch-solution, prepare it for a PullRequest
       uses: microsoft/powerplatform-actions/branch-solution@v0
       with:
-        solution-folder: ${{ github.event.inputs.solution_folder}}/${{ github.event.inputs.solution_name }}
-        solution-target-folder: ${{ github.event.inputs.solution_target_folder}}/${{ github.event.inputs.solution_name }}
+        solution-folder: out/solutions/${{ github.event.inputs.solution_name }}
+        solution-target-folder: solutions/${{ github.event.inputs.solution_name }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         allow-empty-commit: true
