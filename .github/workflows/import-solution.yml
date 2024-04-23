@@ -9,7 +9,7 @@ on:
       solution_import_folder:
         description: 'Folder name where the solution to import is located *do not change*'
         required: true
-        default: out/solutions/
+        default: solutions/
       solution_target_folder: 
         description: 'Folder name in target environment for the imported solution *do not change*'
         required: true
