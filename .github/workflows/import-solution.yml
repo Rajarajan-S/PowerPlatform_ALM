@@ -28,9 +28,9 @@ jobs:
     - name: import-solution action
       uses: microsoft/powerplatform-actions/import-solution@v0
       with:
-        environment-url: 'YOUR_TARGET_ENVIRONMENT_URL'
-        app-id: 'YOUR_APP_ID'
+        environment-url: 'https://rajatest.crm8.dynamics.com/'
+        app-id: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
         client-secret: ${{ secrets.POWERPLATFORMALM }}
-        tenant-id: 'YOUR_TENANT_ID'
+        tenant-id: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
         solution-file: ${{ github.event.inputs.solution_import_folder}}/${{ github.event.inputs.solution_name }}
         target-folder: ${{ github.event.inputs.solution_target_folder}}
