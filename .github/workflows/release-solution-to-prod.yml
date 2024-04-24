@@ -1,0 +1,38 @@
+name: release-solution-to-prod
+
+on:
+  workflow_dispatch:
+    inputs:
+      solution_name:
+        description: 'Name of the solution from Power Platform'
+        required: true
+  release:
+    types: [created]
+
+jobs:
+  release-to-prod:
+    runs-on: windows-latest
+    env:
+      RUNNER_DEBUG: 1
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: true
+
+    - name: Fetch the solution
+      uses: actions/download-artifact@v2
+      with:
+        name: managedSolutions
+        path: out/release/
+
+    - name: Import solution to prod env
+      uses: microsoft/powerplatform-actions/import-solution@v0
+      with:
+        environment-url: 'https://rajatest.crm8.dynamics.com/'
+        tenant-id: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
+        app-id: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
+        password-secret: ${{ secrets.POWERPLATFORMALM }}
+        solution-file: out/release/${{ github.event.inputs.solution_name }}.zip
+        force-overwrite: true
+        publish-changes: true
