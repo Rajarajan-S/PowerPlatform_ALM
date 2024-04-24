@@ -24,7 +24,7 @@ jobs:
       uses: microsoft/powerplatform-actions/who-am-i@v0
       with:
         environment-url: 'https://rajadev.crm8.dynamics.com/'
-        password-secret: ${{ secrets.POWERPLATFORMALM }}
+        client-secret: ${{ secrets.POWERPLATFORMALM }}
         app-id: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
         tenant-id: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
         
@@ -34,7 +34,7 @@ jobs:
         environment-url: 'https://rajadev.crm8.dynamics.com/'
         tenant-id: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
         app-id: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
-        password-secret: ${{ secrets.POWERPLATFORMALM }}
+        client-secret: ${{ secrets.POWERPLATFORMALM }}
         solution-name: ${{ github.event.inputs.solution_name }}
         solution-output-file: out/exported/${{ github.event.inputs.solution_name }}.zip
 
