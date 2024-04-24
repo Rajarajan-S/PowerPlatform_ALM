@@ -32,7 +32,7 @@ jobs:
         environment-url: 'https://rajatest.crm8.dynamics.com/'
         tenant-id: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
         app-id: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
-        password-secret: ${{ secrets.POWERPLATFORMALM }}
+        client-secret: ${{ secrets.POWERPLATFORMALM }}
         solution-file: out/release/${{ github.event.inputs.solution_name }}.zip
         force-overwrite: true
         publish-changes: true
