@@ -31,7 +31,7 @@ jobs:
     - name: export-solution action
       uses: microsoft/powerplatform-actions/export-solution@v0
       with:
-        environment-url: 'https://dev-org24daf59b.crm.dynamics.com'
+        environment-url: 'https://rajadev.crm8.dynamics.com/'
         tenant-id: '21f74bf9-8ab8-4168-811d-fa04d78ab412'
         app-id: '0a00a0cd-ed0b-4b09-935f-d0a579aa8e11'
         password-secret: ${{ secrets.POWERPLATFORMALM }}
